@@ -10,6 +10,7 @@ import tacos.Ingredient.Type;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -36,9 +37,16 @@ public class DesignTacoController {
             model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
         }
 
-        model.addAttribute("design", new Taco());
+//        model.addAttribute("design", new Taco());
 
         return "design";
+    }
+
+    private List<Ingredient> filterByType(List<Ingredient> ingredients, Type type) {
+        return  ingredients
+                .stream()
+                .filter(ingredient -> ingredient.getType() == type)
+                .collect(Collectors.toList());
     }
 
 }
