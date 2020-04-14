@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:h2:~/mydbInHomeDir;AUTO_SERVER=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+taco:
+  orders:
+    page-size: 10
+
+logging:
+  level:
+    taco: DEBUG
+
+---
+spring:
+  profiles: prod
+
+  datasource:
+    url: jdbc:mysql://localhost/tacocloud
+    username: tacouser
+    password: tacopassword
+
+logging:
+  level:
+    taco: WARN
+
