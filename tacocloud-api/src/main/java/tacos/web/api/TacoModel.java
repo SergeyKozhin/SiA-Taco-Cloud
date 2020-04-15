@@ -20,12 +20,11 @@ public class TacoModel extends RepresentationModel<TacoModel> {
     private final Date createdAt;
 
     @Getter
-    private final List<IngredientModel> ingredients;
+    private final CollectionModel<IngredientModel> ingredients;
 
     public TacoModel(Taco taco) {
         this.name = taco.getName();
         this.createdAt = taco.getCreatedAt();
-        IngredientModelAssembler assembler = new IngredientModelAssembler();
-        this.ingredients = taco.getIngredients().stream().map(assembler::toModel).collect(Collectors.toList());
+        this.ingredients = new IngredientModelAssembler().toCollectionModel(taco.getIngredients());
     }
 }
