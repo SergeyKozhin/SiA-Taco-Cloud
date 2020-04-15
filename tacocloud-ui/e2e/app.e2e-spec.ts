@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('taco-web-ui App', () => {
+describe('taco-tacos.web-ui App', () => {
   let page: AppPage;
 
   beforeEach(() => {
