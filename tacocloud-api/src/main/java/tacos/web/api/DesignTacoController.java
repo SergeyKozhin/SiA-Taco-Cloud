@@ -36,14 +36,20 @@ public class DesignTacoController {
     }
 
     @GetMapping("/recent")
-    public CollectionModel<TacoModel> recentTacos() {
+    public Iterable<Taco> recentTacos() {
+        PageRequest page = PageRequest.of(0, 12, Sort.by("createdAt").descending());
+        return tacoRepo.findAll(page).getContent();
+    }
+
+    @GetMapping("/recenth")
+    public CollectionModel<TacoModel> recentTacosModels() {
         PageRequest page = PageRequest.of(0, 12, Sort.by("createdAt").descending());
         List<Taco> tacos = tacoRepo.findAll(page).getContent();
 
         CollectionModel<TacoModel> tacoModels = new TacoModelAssembler().toCollectionModel(tacos);
         tacoModels.add(
                 WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(DesignTacoController.class).recentTacos())
-                .withRel("recents"));
+                        .withRel("recents"));
 
         return tacoModels;
     }
