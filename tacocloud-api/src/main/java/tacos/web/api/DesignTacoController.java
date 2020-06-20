@@ -14,8 +14,6 @@ import reactor.core.publisher.Mono;
 import tacos.Taco;
 import tacos.data.TacoRepository;
 
-import java.util.UUID;
-
 @RestController
 @RequestMapping(path = "/design",
         produces = "application/json")
@@ -29,11 +27,11 @@ public class DesignTacoController {
 
     @GetMapping("/recent")
     public Flux<Taco> recentTacos() {
-        return tacoRepo.findAll().take(12);
+        return tacoRepo.findByOrderByCreatedAtDesc().take(12);
     }
 
     @GetMapping("/{id}")
-    public Mono<Taco> tacoById(@PathVariable("id") UUID id) {
+    public Mono<Taco> tacoById(@PathVariable("id") String id) {
         return tacoRepo.findById(id);
     }
 

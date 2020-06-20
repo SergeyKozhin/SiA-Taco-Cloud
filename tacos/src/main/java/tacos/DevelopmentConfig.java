@@ -22,22 +22,21 @@ public class DevelopmentConfig {
     public CommandLineRunner dataLoader(IngredientRepository repo, UserRepository userRepo,
                                         TacoRepository tacoRepo, PasswordEncoder encoder) {
         return args -> {
-            IngredientUDT flourTortilla = saveAnIngredient(repo, "FLTO", "Flour Tortilla", Type.WRAP);
-            IngredientUDT cornTortilla = saveAnIngredient(repo,"COTO", "Corn Tortilla", Type.WRAP);
-            IngredientUDT groundBeef = saveAnIngredient(repo,"GRBF", "Ground Beef", Type.PROTEIN);
-            IngredientUDT carnitas = saveAnIngredient(repo,"CARN", "Carnitas", Type.PROTEIN);
-            IngredientUDT tomatoes = saveAnIngredient(repo,"TMTO", "Diced Tomatoes", Type.VEGGIES);
-            IngredientUDT lettuce = saveAnIngredient(repo,"LETC", "Lettuce", Type.VEGGIES);
-            IngredientUDT cheddar = saveAnIngredient(repo,"CHED", "Cheddar", Type.CHEESE);
-            IngredientUDT jack = saveAnIngredient(repo,"JACK", "Monterrey Jack", Type.CHEESE);
-            IngredientUDT salsa = saveAnIngredient(repo,"SLSA", "Salsa", Type.SAUCE);
-            IngredientUDT sourCream = saveAnIngredient(repo,"SRCR", "Sour Cream", Type.SAUCE);
+            Ingredient flourTortilla = saveAnIngredient(repo, "FLTO", "Flour Tortilla", Type.WRAP);
+            Ingredient cornTortilla = saveAnIngredient(repo,"COTO", "Corn Tortilla", Type.WRAP);
+            Ingredient groundBeef = saveAnIngredient(repo,"GRBF", "Ground Beef", Type.PROTEIN);
+            Ingredient carnitas = saveAnIngredient(repo,"CARN", "Carnitas", Type.PROTEIN);
+            Ingredient tomatoes = saveAnIngredient(repo,"TMTO", "Diced Tomatoes", Type.VEGGIES);
+            Ingredient lettuce = saveAnIngredient(repo,"LETC", "Lettuce", Type.VEGGIES);
+            Ingredient cheddar = saveAnIngredient(repo,"CHED", "Cheddar", Type.CHEESE);
+            Ingredient jack = saveAnIngredient(repo,"JACK", "Monterrey Jack", Type.CHEESE);
+            Ingredient salsa = saveAnIngredient(repo,"SLSA", "Salsa", Type.SAUCE);
+            Ingredient sourCream = saveAnIngredient(repo,"SRCR", "Sour Cream", Type.SAUCE);
 
 //        UserUDT u = new UserUDT(username, fullname, phoneNumber)
 
-            userRepo.save(new User("sergey71109", encoder.encode("TestPassword"), "Sergey Kozhin",
+            userRepo.save(new User(null, "sergey71109", encoder.encode("TestPassword"), "Sergey Kozhin",
                     "Some street", "Novgorod", "NO", "173009", "9116442505"))
-                    .map(user -> new UserUDT(user.getUsername(), user.getFullName(), user.getPhoneNumber()))
                     .subscribe();
 
             Taco taco1 = new Taco();
@@ -88,9 +87,9 @@ public class DevelopmentConfig {
         };
     }
 
-    private IngredientUDT saveAnIngredient(IngredientRepository repo, String id, String name, Type type) {
+    private Ingredient saveAnIngredient(IngredientRepository repo, String id, String name, Type type) {
         Ingredient ingredient = new Ingredient(id, name, type);
         repo.save(ingredient).subscribe();
-        return new IngredientUDT(name, type);
+        return ingredient;
     }
 }

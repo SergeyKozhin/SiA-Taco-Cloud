@@ -7,7 +7,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tacos.Ingredient;
-import tacos.IngredientUDT;
 import tacos.Taco;
 import tacos.data.TacoRepository;
 
@@ -30,7 +29,7 @@ public class DesignTacoControllerTest {
         Flux<Taco> tacoFlux = Flux.just(tacos);
 
         TacoRepository tacoRepository = Mockito.mock(TacoRepository.class);
-        when(tacoRepository.findAll()).thenReturn(tacoFlux);
+        when(tacoRepository.findByOrderByCreatedAtDesc()).thenReturn(tacoFlux);
 
         WebTestClient testClient = WebTestClient.bindToController(new DesignTacoController(tacoRepository)).build();
 
@@ -42,11 +41,12 @@ public class DesignTacoControllerTest {
                 .contains(Arrays.copyOf(tacos, 12));
     }
 
+    @Test
     public void shouldSaveTaco() {
         TacoRepository tacoRepository = Mockito.mock(TacoRepository.class);
         Mono<Taco> unsavedTacoMono = Mono.just(testTaco(null));
         Taco savedTaco = testTaco(null);
-        savedTaco.setId(UUID.randomUUID());
+        savedTaco.setId("1");
         Mono<Taco> savedTacoMono = Mono.just(savedTaco);
 
         when(tacoRepository.save(any())).thenReturn(savedTacoMono);
@@ -65,12 +65,12 @@ public class DesignTacoControllerTest {
     private Taco testTaco(Long number) {
         Taco taco = new Taco();
         if (number != null) {
-            taco.setId(UUID.randomUUID());
+            taco.setId(number.toString());
         }
         taco.setName("Taco " + number);
-        List<IngredientUDT> ingredients = new ArrayList<>();
-        ingredients.add(new IngredientUDT("Ingredient A", Ingredient.Type.WRAP));
-        ingredients.add(new IngredientUDT("Ingredient B", Ingredient.Type.PROTEIN));
+        List<Ingredient> ingredients = new ArrayList<>();
+        ingredients.add(new Ingredient("INGA","Ingredient A", Ingredient.Type.WRAP));
+        ingredients.add(new Ingredient("INGB","Ingredient B", Ingredient.Type.PROTEIN));
         taco.setIngredients(ingredients);
         return taco;
     }

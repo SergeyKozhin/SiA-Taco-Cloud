@@ -47,7 +47,7 @@ public class OrderApiController {
     }
 
     @PatchMapping(path = "/{orderId}", consumes = "application/json")
-    public Mono<Order> patchOrder(@PathVariable("orderId") UUID orderId,
+    public Mono<Order> patchOrder(@PathVariable("orderId") String orderId,
                                   @RequestBody Order patch) {
         return orderRepo.findById(orderId).map(
                 order -> {
@@ -82,7 +82,7 @@ public class OrderApiController {
 
     @DeleteMapping("/{orderId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOrder(@PathVariable("orderId") UUID orderId) {
+    public void deleteOrder(@PathVariable("orderId") String orderId) {
         try {
             orderRepo.deleteById(orderId);
         } catch (EmptyResultDataAccessException ignored) {

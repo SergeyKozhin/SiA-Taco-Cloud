@@ -19,6 +19,6 @@ public class RecentTacosController {
 
     @GetMapping(path = "/tacos/recent", produces = "application/hal+json")
     public Flux<Taco> recentTacos() {
-        return tacoRepo.findAll().take(12);
+        return tacoRepo.findByOrderByCreatedAtDesc().take(12);
     }
 }

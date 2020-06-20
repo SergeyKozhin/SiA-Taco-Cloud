@@ -1,12 +1,10 @@
 package tacos;
 
-import com.datastax.driver.core.utils.UUIDs;
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
-import org.springframework.data.cassandra.core.mapping.Column;
-import org.springframework.data.cassandra.core.mapping.PrimaryKey;
-import org.springframework.data.cassandra.core.mapping.Table;
-
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
@@ -15,14 +13,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Data
-@Table("tacoorders")
+@Document
 public class Order implements Serializable {
 
-    @PrimaryKey
-    private UUID id = UUIDs.timeBased();
+    @Id
+    private String id;
 
     private Date placedAt = new Date();
 
@@ -51,13 +48,12 @@ public class Order implements Serializable {
     @Digits(integer = 3, fraction = 0, message = "Invalid CVV")
     private String ccCVV;
 
-    @Column("user")
-    private UserUDT user;
+    @Field
+    private User user;
 
-    @Column("tacos")
-    private List<TacoUDT> tacos = new ArrayList<>();
+    private List<Taco> tacos = new ArrayList<>();
 
-    public void addDesign(TacoUDT design) {
+    public void addDesign(Taco design) {
         tacos.add(design);
     }
 
