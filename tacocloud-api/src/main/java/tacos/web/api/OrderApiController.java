@@ -12,9 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import tacos.Order;
 import tacos.data.OrderRepository;
 import tacos.messaging.OrderMessagingService;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/orders",
@@ -31,54 +35,57 @@ public class OrderApiController {
     }
 
     @GetMapping
-    public Iterable<Order> getAllOrders() {
+    public Flux<Order> getAllOrders() {
         return orderRepo.findAll();
     }
 
     @PostMapping(consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public Order createOrder(@RequestBody Order order) {
+    public Mono<Order> createOrder(@RequestBody Order order) {
         messagingService.sendOrder(order);
         return orderRepo.save(order);
     }
 
     @PatchMapping(path = "/{orderId}", consumes = "application/json")
-    public Order patchOrder(@PathVariable("orderId") Long orderId,
-                            @RequestBody Order patch) {
-        Order order = orderRepo.findById(orderId).get();
-        if (patch.getDeliveryName() != null) {
-            order.setDeliveryName(patch.getDeliveryName());
-        }
-        if (patch.getDeliveryStreet() != null) {
-            order.setDeliveryStreet(patch.getDeliveryStreet());
-        }
-        if (patch.getDeliveryCity() != null) {
-            order.setDeliveryCity(patch.getDeliveryCity());
-        }
-        if (patch.getDeliveryState() != null) {
-            order.setDeliveryState(patch.getDeliveryState());
-        }
-        if (patch.getDeliveryZip() != null) {
-            order.setDeliveryZip(patch.getDeliveryState());
-        }
-        if (patch.getCcNumber() != null) {
-            order.setCcNumber(patch.getCcNumber());
-        }
-        if (patch.getCcExpiration() != null) {
-            order.setCcExpiration(patch.getCcExpiration());
-        }
-        if (patch.getCcCVV() != null) {
-            order.setCcCVV(patch.getCcCVV());
-        }
-
-        return orderRepo.save(order);
+    public Mono<Order> patchOrder(@PathVariable("orderId") UUID orderId,
+                                  @RequestBody Order patch) {
+        return orderRepo.findById(orderId).map(
+                order -> {
+                    if (patch.getDeliveryName() != null) {
+                        order.setDeliveryName(patch.getDeliveryName());
+                    }
+                    if (patch.getDeliveryStreet() != null) {
+                        order.setDeliveryStreet(patch.getDeliveryStreet());
+                    }
+                    if (patch.getDeliveryCity() != null) {
+                        order.setDeliveryCity(patch.getDeliveryCity());
+                    }
+                    if (patch.getDeliveryState() != null) {
+                        order.setDeliveryState(patch.getDeliveryState());
+                    }
+                    if (patch.getDeliveryZip() != null) {
+                        order.setDeliveryZip(patch.getDeliveryState());
+                    }
+                    if (patch.getCcNumber() != null) {
+                        order.setCcNumber(patch.getCcNumber());
+                    }
+                    if (patch.getCcExpiration() != null) {
+                        order.setCcExpiration(patch.getCcExpiration());
+                    }
+                    if (patch.getCcCVV() != null) {
+                        order.setCcCVV(patch.getCcCVV());
+                    }
+                    return order;
+                })
+                .flatMap(orderRepo::save);
     }
 
     @DeleteMapping("/{orderId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOrder(@PathVariable("orderId") Long orderId) {
+    public void deleteOrder(@PathVariable("orderId") UUID orderId) {
         try {
             orderRepo.deleteById(orderId);
-        } catch (EmptyResultDataAccessException ignored) {}
+        } catch (EmptyResultDataAccessException ignored) {
+        }
     }
 }

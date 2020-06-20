@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
     implementation project(":tacocloud-domain")
-    
+
     implementation 'org.springframework.kafka:spring-kafka'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

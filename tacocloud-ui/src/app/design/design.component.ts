@@ -1,7 +1,7 @@
-import { Component, OnInit, Injectable, Input } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router } from '@angular/router/';
-import { CartService } from '../cart/cart-service';
+import {Component, OnInit, Injectable, Input} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Router} from '@angular/router/';
+import {CartService} from '../cart/cart-service';
 
 @Component({
   selector: 'taco-design',
@@ -30,15 +30,16 @@ export class DesignComponent implements OnInit {
   // tag::ngOnInit[]
   ngOnInit() {
     this.httpClient.get('http://localhost:8080/ingredientsx')
-        .subscribe(data => {
-          this.allIngredients = data;
-          this.wraps = this.allIngredients.filter(w => w.type === 'WRAP');
-          this.proteins = this.allIngredients.filter(p => p.type === 'PROTEIN');
-          this.veggies = this.allIngredients.filter(v => v.type === 'VEGGIES');
-          this.cheeses = this.allIngredients.filter(c => c.type === 'CHEESE');
-          this.sauces = this.allIngredients.filter(s => s.type === 'SAUCE');
-        });
+      .subscribe(data => {
+        this.allIngredients = data;
+        this.wraps = this.allIngredients.filter(w => w.type === 'WRAP');
+        this.proteins = this.allIngredients.filter(p => p.type === 'PROTEIN');
+        this.veggies = this.allIngredients.filter(v => v.type === 'VEGGIES');
+        this.cheeses = this.allIngredients.filter(c => c.type === 'CHEESE');
+        this.sauces = this.allIngredients.filter(s => s.type === 'SAUCE');
+      });
   }
+
   // end::ngOnInit[]
 
   updateIngredients(ingredient, event) {
@@ -52,13 +53,14 @@ export class DesignComponent implements OnInit {
   // tag::onSubmit[]
   onSubmit() {
     this.httpClient.post(
-        'http://localhost:8080/design',
-        this.model, {
-            headers: new HttpHeaders().set('Content-type', 'application/json'),
-        }).subscribe(taco => this.cart.addToCart(taco));
+      'http://localhost:8080/design',
+      this.model, {
+        headers: new HttpHeaders().set('Content-type', 'application/json'),
+      }).subscribe(taco => this.cart.addToCart(taco));
 
     this.router.navigate(['/cart']);
   }
+
   // end::onSubmit[]
 
 }

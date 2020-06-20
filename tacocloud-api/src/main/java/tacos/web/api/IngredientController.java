@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import tacos.Ingredient;
 import tacos.data.IngredientRepository;
 
@@ -31,13 +33,13 @@ public class IngredientController {
     }
 
     @GetMapping
-    public Iterable<Ingredient> allIngredients() {
+    public Flux<Ingredient> allIngredients() {
         return ingredientRepo.findAll();
     }
 
     @GetMapping(path = "/{id}")
-    public Ingredient getIngredientById(@PathVariable("id") String ingredientId) {
-        return ingredientRepo.findById(ingredientId).orElse(null);
+    public Mono<Ingredient> getIngredientById(@PathVariable("id") String ingredientId) {
+        return ingredientRepo.findById(ingredientId);
     }
 
     @PutMapping("/{id}")
@@ -45,15 +47,18 @@ public class IngredientController {
         if (!ingredient.getId().equals(id)) {
             throw new IllegalStateException("Given ingredient's ID doesn't match the ID in the path.");
         }
-        ingredientRepo.save(ingredient);
+        ingredientRepo.save(ingredient).subscribe();
     }
 
     @PostMapping
-    public ResponseEntity<Ingredient> createIngredient(@RequestBody Ingredient ingredient) {
-        Ingredient saved = ingredientRepo.save(ingredient);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("http://localhost:8080/ingredientsx/" + saved.getId()));
-        return new ResponseEntity<>(saved, headers, HttpStatus.CREATED);
+    public Mono<ResponseEntity<Ingredient>> createIngredient(@RequestBody Mono<Ingredient> ingredient) {
+        return ingredient
+                .flatMap(ingredientRepo::save)
+                .map(i -> {
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setLocation(URI.create("http://localhost:8080/ingredientsx/" + i.getId()));
+                    return new ResponseEntity<Ingredient>(i, headers, HttpStatus.CREATED);
+                });
     }
 
     @DeleteMapping(path = "/{id}")

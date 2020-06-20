@@ -1,5 +1,5 @@
-import { Component, OnInit, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Component, OnInit, Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 import {CartService} from "../cart/cart-service";
 
 @Component({
@@ -13,11 +13,12 @@ export class RecentTacosComponent implements OnInit {
   recentTacos: any;
 
   constructor(private httpClient: HttpClient,
-              private cart: CartService) { }
+              private cart: CartService) {
+  }
 
   ngOnInit() {
     this.httpClient.get('http://localhost:8080/design/recent') // <1>
-        .subscribe(data => this.recentTacos = data);
+      .subscribe(data => this.recentTacos = data);
   }
 
   addToCart(taco) {

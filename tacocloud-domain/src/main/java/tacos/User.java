@@ -1,29 +1,29 @@
 package tacos;
 
+import com.datastax.driver.core.utils.UUIDs;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @RequiredArgsConstructor
-@Entity
+@Table("users")
 public class User implements UserDetails {
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue
-    private Long id;
+    @PrimaryKey
+    private UUID id = UUIDs.timeBased();
 
     private final String username;
     private final String password;

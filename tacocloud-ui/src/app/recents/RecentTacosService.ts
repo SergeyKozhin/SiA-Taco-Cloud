@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { ApiService } from '../api/ApiService';
+import {Injectable} from '@angular/core';
+import {ApiService} from '../api/ApiService';
 
 @Injectable()
 export class RecentTacosService {

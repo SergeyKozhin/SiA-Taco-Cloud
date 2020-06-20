@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'taco-specials',
@@ -6,7 +6,9 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class SpecialsComponent implements OnInit {
-  constructor() { }
+  constructor() {
+  }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 }

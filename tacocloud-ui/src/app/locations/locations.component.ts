@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'locations-tacocloud',
@@ -6,7 +6,9 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class LocationsComponent implements OnInit {
-  constructor() { }
+  constructor() {
+  }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 }

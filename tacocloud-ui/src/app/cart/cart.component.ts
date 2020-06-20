@@ -1,6 +1,6 @@
-import { Component, OnInit, Injectable } from '@angular/core';
-import { CartService } from './cart-service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {Component, OnInit, Injectable} from '@angular/core';
+import {CartService} from './cart-service';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Component({
   selector: 'taco-cart',
@@ -26,7 +26,8 @@ export class CartComponent implements OnInit {
     this.cart = cart;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   get cartItems() {
     return this.cart.getItemsInCart();
@@ -43,11 +44,11 @@ export class CartComponent implements OnInit {
     });
 
     this.httpClient.post(
-        'http://localhost:8080/orders',
-        this.model, {
-            headers: new HttpHeaders().set('Content-type', 'application/json')
-                    .set('Accept', 'application/json'),
-        }).subscribe(r => this.cart.emptyCart());
+      'http://localhost:8080/orders',
+      this.model, {
+        headers: new HttpHeaders().set('Content-type', 'application/json')
+          .set('Accept', 'application/json'),
+      }).subscribe(r => this.cart.emptyCart());
 
     // TODO: Do something after this...navigate to a thank you page or something
   }

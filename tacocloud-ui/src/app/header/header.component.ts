@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CartService } from '../cart/cart-service';
+import {Component, OnInit} from '@angular/core';
+import {CartService} from '../cart/cart-service';
 
 @Component({
   selector: 'taco-header',
@@ -14,5 +14,6 @@ export class HeaderComponent implements OnInit {
     this.cart = cart;
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 }
